@@ -21,10 +21,6 @@ def get_random_chrome_user_agent():
     return user_agent.random
 
 def create_driver():
-    # script_dir = os.path.dirname(os.path.abspath(__file__))
-    # base_directory = os.path.join(script_dir, 'users')
-    # user_directory = os.path.join(base_directory, f'user_{user_id}')
-
     driver = sb.Driver(browser = 'chrome', headless = False, uc = True, incognito = True)
     wait = webdriver.Chrome.implicitly_wait(driver, 20)
 
@@ -73,16 +69,11 @@ def main_login(url, pause=300, rev=False, driver=None):
     if driver is None:
         driver = create_driver()
         driver.uc_open_with_reconnect(url, 4)
-        # driver.reconnect(0.2)
         time.sleep(pause)
-        # driver.uc_gui_click_captcha()
 
     h = login_for_hidden_spans(driver)
 
     SCROLL_PAUSE_TIME = 0.3
-
-    # Get max scroll height
-    # last_height = driver.execute_script("return document.body.scrollHeight")
 
     result = []
     
@@ -208,7 +199,6 @@ def login_for_hidden_spans(driver):
     return result
 
 def parse(html, search=None, attr=None, string=None):
-    # <span class=vq6_29> у отзывов
     soup = BeautifulSoup(html, features = "html.parser")
     
     if soup is not None:
@@ -223,20 +213,14 @@ def line_break_remove(text):
 
 if __name__ == '__main__':
     useragent = get_random_chrome_user_agent()
-
-    # target_url = 'https://www.ozon.ru/product/besprovodnye-naushniki-xiaomi-haylou-x1-c-dvoynym-shumopodavleniem-sinie-1033689462/?advert=AL8Asq2mFRV4Fpudgkv0NfrnSElQurFKZW2AeZlaZCevEWyA0bsQ1Ij_hIeAs9gK8f61OCO9B3beblDIq1E4ZcswJupgplrtV1huRYma9qcTrqhWxWKUtkdayvVOmku7QKeV0iaSIQb1ww5K0QO2qSyLVPpE1aARj5kh1Qk17VT2GSrLkUC1fjTNdZrmSMjW3HRfF4p22lBCdqwXcV7g9ykpvwLOeHdRpGc0iHM0At_KMRRNvDg2-jb2JCKbMne_ZhpeeFd_INmnzL8yPwzHW2Uyis_ev0j14cE-MyFXKK39LP-Q2RDX-O2D43eCUGLB7sn0GFtPXRt3vLrxYm_rf-j4nxzlucvHzDMWmq0ZlE_Jg9aYkcyGcCXeuIiI7tdCPqUK2dEGK1QXTsNx6v6uP63oU3WpZ6-wmd3yOUy2-ZlmpkJOnpbZFg&avtc=1&avte=2&avts=1727397895&keywords=наушники'
     
     target_url = 'https://www.ozon.ru/product/grechnevaya-krupa-agroholding-step-900g-1597288781/?oos_search=false'
 
-    url = 'https://www.ozon.ru/'
-    check_ip = 'https://api.ipify.org'
     pause_to_set_up = 15
 
     # add pause to get time to add attr values
     result = main_login(target_url, pause=pause_to_set_up)
 
-    # span_attr = 'v4q_29' # set up value !!!
-    
     span = []
     hid_span = []
     last_len = 0
@@ -260,7 +244,6 @@ if __name__ == '__main__':
         
         for s in span:
             par = s.parent.parent.parent.parent
-            # print(par)
             cl = par['class'][0]
             parent_divs = par.parent.children
 
@@ -269,10 +252,7 @@ if __name__ == '__main__':
                 if i == 0:
                     x = e
                 
-                # print(e.attrs, '\n')
-            
             div = x.find('div', {'class' : get_parent_star_class(hidden_span_class)})
-            # print(div.attrs)
             stars = div.find('div', {'class' : get_star_class(span_class)})
             acc = 0
 
